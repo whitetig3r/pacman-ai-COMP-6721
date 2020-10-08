@@ -90,11 +90,14 @@ def depthFirstSearch(problem):
     initial_state = problem.getStartState()
     closed_stack = util.Stack()
     open_stack = util.Stack()
-    open_stack.push((initial_state,[],None))
+    open_stack.push((initial_state, [], 0))
 
     while not open_stack.isEmpty():
         curr_node = open_stack.pop()
         closed_stack.push(curr_node[0])
+
+        if curr_node[0] in closed_stack.list:
+            continue
 
         if problem.isGoalState(curr_node[0]):
             return curr_node[1]
@@ -112,7 +115,7 @@ def breadthFirstSearch(problem):
     initial_state = problem.getStartState()
     closed_queue = util.Queue()
     open_queue = util.Queue()
-    open_queue.push((initial_state, [], None))
+    open_queue.push((initial_state, [], 0))
 
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
@@ -137,7 +140,6 @@ def uniformCostSearch(problem):
     "*** YOUR CODE HERE ***"
     initial_state = problem.getStartState()
     closed_list = []
-    cost_checker = util.Counter()
     open_queue = util.PriorityQueue()
     open_queue.update((initial_state, [], 0), 0)
 
@@ -157,9 +159,7 @@ def uniformCostSearch(problem):
                     coords = successor[0]
                     updated_route = curr_node[1] + [successor[1]]
                     cost = successor[1]
-                    route_till_successor = curr_node[1] + [successor[1]]
-                    cost_checker[str(successor[0])] = problem.getCostOfActions(route_till_successor)
-                    open_queue.update((coords, updated_route, cost), cost_checker[str(successor[0])])
+                    open_queue.update((coords, updated_route, cost), problem.getCostOfActions(updated_route))
 
 
 def nullHeuristic(state, problem=None):
