@@ -41,6 +41,16 @@ import util
 import time
 import search
 
+# a common function to handle heuristic calculations
+def max_maze_dist(x2_list, x1, problem):
+    def p_func(maze_dist):
+        return -maze_dist
+    heuristic_list = util.PriorityQueueWithFunction(p_func)
+    heuristic_list.push(0)
+    for x2 in x2_list:
+        heuristic_list.push(mazeDistance(x1, x2, problem.startingGameState))
+    return heuristic_list.pop()
+
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
 
@@ -288,7 +298,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        self.startState = startingGameState
+        self.startingGameState = startingGameState
 
     def getStartState(self):
         """
@@ -392,18 +402,11 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    unvisited_corners = [corners[idx] for idx, corner in enumerate(list(state[1])) if corner == "F"]
-
-    def p_func(maze_dist):
-        return -maze_dist
-
-    corner_heuristic = util.PriorityQueueWithFunction(p_func)
-    corner_heuristic.push(0)
-
-    for corner in unvisited_corners:
-        corner_heuristic.push(mazeDistance(state[0], corner, problem.startState))
-
-    return corner_heuristic.pop()
+    return max_maze_dist(
+        [corners[idx] for idx, corner in enumerate(list(state[1])) if corner == "F"],
+        state[0],
+        problem
+    )
 
 
 class AStarCornersAgent(SearchAgent):
@@ -498,16 +501,7 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    def p_func(maze_dist):
-        return -maze_dist
-
-    food_heuristic = util.PriorityQueueWithFunction(p_func)
-    food_heuristic.push(0)
-
-    for grid_dot in foodGrid.asList():
-        food_heuristic.push(mazeDistance(position, grid_dot, problem.startingGameState))
-
-    return food_heuristic.pop()
+    return max_maze_dist(foodGrid.asList(), position, problem)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
