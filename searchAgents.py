@@ -485,7 +485,16 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    def p_func(maze_dist):
+        return -maze_dist
+
+    food_heuristic = util.PriorityQueueWithFunction(p_func)
+    food_heuristic.push(0)
+
+    for grid_dot in foodGrid.asList():
+        food_heuristic.push(mazeDistance(position, grid_dot, problem.startingGameState))
+
+    return food_heuristic.pop()
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
