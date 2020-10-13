@@ -288,6 +288,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.startState = startingGameState
 
     def getStartState(self):
         """
@@ -343,7 +344,7 @@ class CornersProblem(search.SearchProblem):
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
             next = (nextx,nexty)
-            visited = [self.corners[idx] for idx, corner in enumerate(state[1].split()) if corner == "T"]
+            visited = [self.corners[idx] for idx, corner in enumerate(list(state[1])) if corner == "T"]
             visited_str = state[1]
             if not hitsWall:
                 if next in self.corners:
@@ -391,7 +392,19 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    unvisited_corners = [corners[idx] for idx, corner in enumerate(list(state[1])) if corner == "F"]
+
+    def p_func(maze_dist):
+        return -maze_dist
+
+    corner_heuristic = util.PriorityQueueWithFunction(p_func)
+    corner_heuristic.push(0)
+
+    for corner in unvisited_corners:
+        corner_heuristic.push(mazeDistance(state[0], corner, problem.startState))
+
+    return corner_heuristic.pop()
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
