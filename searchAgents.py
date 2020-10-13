@@ -295,14 +295,27 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return (self.startingPosition, "FFFF")
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
+        copy_of_state = list(state)
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if copy_of_state[0] in self.corners:
+            index_to_set = self.corners.index(copy_of_state[0])
+            if not copy_of_state[1][index_to_set]:
+                visited_str = copy_of_state[1]
+                for i in range(0, 4):
+                    if i == index_to_set:
+                        visited_str += "T"
+                    else:
+                        visited_str += visited_str[1]
+                copy_of_state[1] = visited_str
+                state[1] = tuple(copy_of_state)
+            return state[1] == "TTTT"
+        return False
 
     def getSuccessors(self, state):
         """
@@ -325,7 +338,25 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            next = (nextx,nexty)
+            visited = [self.corners[idx] for idx, corner in enumerate(state[1].split()) if corner == "T"]
+            visited_str = state[1]
+            if not hitsWall:
+                if next in self.corners:
+                    if next not in visited:
+                        index_to_set = self.corners.index(next)
+                        v_visited_str = ""
+                        for i in range(0,4):
+                            if i == index_to_set:
+                                v_visited_str += "T"
+                            else:
+                                v_visited_str += visited_str[i]
+                        visited_str = v_visited_str
+                successors.append(((next, visited_str), action, 1))
         self._expanded += 1 # DO NOT CHANGE
         return successors
 
