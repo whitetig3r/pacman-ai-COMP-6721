@@ -92,7 +92,7 @@ def depthFirstSearch(problem):
     open_stack.push(initial_state)
     closed_list = []
     solution_list = {}
-    solution_list[node_transform(initial_state[0])] = None
+    solution_list[initial_state[0]] = None
 
     while not open_stack.isEmpty():
         curr_node = open_stack.pop()
@@ -122,7 +122,7 @@ def breadthFirstSearch(problem):
     open_queue.push(initial_state)
     closed_list = []
     solution_list = {}
-    solution_list[node_transform(initial_state[0])] = []
+    solution_list[initial_state[0]] = []
 
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
@@ -157,7 +157,7 @@ def uniformCostSearch(problem):
     open_queue.push(initial_state, float('inf'))
     closed_list = []
     solution_list = {}
-    solution_list[node_transform(initial_state[0])] = util.PriorityQueue()
+    solution_list[initial_state[0]] = util.PriorityQueue()
 
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
@@ -201,7 +201,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     open_queue.push(initial_state, float('inf'))
     closed_list = []
     solution_list = {}
-    solution_list[node_transform(initial_state[0])] = util.PriorityQueue()
+    solution_list[initial_state[0]] = util.PriorityQueue()
 
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
