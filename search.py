@@ -72,12 +72,6 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def node_transform(node):
-    if len(node) == 2:
-        return node
-    else:
-        return node[0]
-
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -106,16 +100,16 @@ def depthFirstSearch(problem):
         if curr_node in closed_list:
             continue
 
-        closed_list.append(node_transform(curr_node[0]))
+        closed_list.append(curr_node[0])
 
-        if problem.isGoalState(node_transform(curr_node[0])):
+        if problem.isGoalState(curr_node[0]):
             result = []
             while curr_node != None:
                 result.append(curr_node[1])
-                curr_node = solution_list[node_transform(curr_node[0])]
+                curr_node = solution_list[curr_node[0]]
             return list(reversed(result[:-1]))
         else:
-            for successor in problem.getSuccessors(node_transform(curr_node[0])):
+            for successor in problem.getSuccessors(curr_node[0]):
                 if (successor[0] not in closed_list) and (successor not in open_stack.list):
                     open_stack.push(successor)
                     solution_list[successor[0]] = curr_node
@@ -133,22 +127,22 @@ def breadthFirstSearch(problem):
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
 
-        if node_transform(curr_node[0]) in closed_list:
+        if curr_node[0] in closed_list:
             continue
 
-        closed_list.append(node_transform(curr_node[0]))
+        closed_list.append(curr_node[0])
 
-        if problem.isGoalState(node_transform(curr_node[0])):
+        if problem.isGoalState(curr_node[0]):
             result = []
             while curr_node != None:
                 result.append(curr_node[1])
-                if solution_list[node_transform(curr_node[0])]:
-                    curr_node = min(solution_list[node_transform(curr_node[0])], key = lambda node: node[2])
+                if solution_list[curr_node[0]]:
+                    curr_node = min(solution_list[curr_node[0]], key = lambda node: node[2])
                 else:
                     curr_node = None
             return list(reversed(result[:-1]))
         else:
-            for successor in problem.getSuccessors(node_transform(curr_node[0])):
+            for successor in problem.getSuccessors(curr_node[0]):
                 if (successor[0] not in closed_list):
                     open_queue.push(successor)
                     if successor[0] not in solution_list:
@@ -168,22 +162,22 @@ def uniformCostSearch(problem):
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
 
-        if node_transform(curr_node[0]) in closed_list:
+        if curr_node[0] in closed_list:
             continue
 
-        closed_list.append(node_transform(curr_node[0]))
+        closed_list.append(curr_node[0])
 
-        if problem.isGoalState(node_transform(curr_node[0])):
+        if problem.isGoalState(curr_node[0]):
             result = []
             while curr_node != None:
                 result.append(curr_node[1])
-                if not solution_list[node_transform(curr_node[0])].isEmpty():
-                    curr_node = solution_list[node_transform(curr_node[0])].pop()
+                if not solution_list[curr_node[0]].isEmpty():
+                    curr_node = solution_list[curr_node[0]].pop()
                 else:
                     curr_node = None
             return list(reversed(result[:-1]))
         else:
-            for successor in problem.getSuccessors(node_transform(curr_node[0])):
+            for successor in problem.getSuccessors(curr_node[0]):
                 if (successor[0] not in closed_list):
                     combined_cost = curr_node[2] + successor[2]
                     open_queue.update((successor[0], successor[1], combined_cost), combined_cost)
@@ -212,22 +206,22 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     while not open_queue.isEmpty():
         curr_node = open_queue.pop()
 
-        if node_transform(curr_node[0]) in closed_list:
+        if curr_node[0] in closed_list:
             continue
 
-        closed_list.append(node_transform(curr_node[0]))
+        closed_list.append(curr_node[0])
 
-        if problem.isGoalState(node_transform(curr_node[0])):
+        if problem.isGoalState(curr_node[0]):
             result = []
             while curr_node != None:
                 result.append(curr_node[1])
-                if not solution_list[node_transform(curr_node[0])].isEmpty():
-                    curr_node = solution_list[node_transform(curr_node[0])].pop()
+                if not solution_list[curr_node[0]].isEmpty():
+                    curr_node = solution_list[curr_node[0]].pop()
                 else:
                     curr_node = None
             return list(reversed(result[:-1]))
         else:
-            for successor in problem.getSuccessors(node_transform(curr_node[0])):
+            for successor in problem.getSuccessors(curr_node[0]):
                 if (successor[0] not in closed_list):
                     combined_cost = curr_node[2] + successor[2]
                     combined_cost_with_heuristic = combined_cost + heuristic(successor[0], problem)
