@@ -312,8 +312,8 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        copy_of_state = list(state)
         "*** YOUR CODE HERE ***"
+        copy_of_state = list(state)
         if copy_of_state[0] in self.corners:
             index_to_set = self.corners.index(copy_of_state[0])
             if not copy_of_state[1][index_to_set]:
